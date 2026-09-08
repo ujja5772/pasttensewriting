@@ -3,11 +3,11 @@
   functions = "netlify/functions"
 
 [[redirects]]
-  from = "/api/chat"
+  from = "/chat"
   to = "/.netlify/functions/chat"
   status = 200
 
 [[redirects]]
-  from = "/api/search-photo"
+  from = "/search-photo"
   to = "/.netlify/functions/search-photo"
   status = 200
