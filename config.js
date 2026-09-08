@@ -3,4 +3,4 @@
 // 이 파일 하나만 고치면 두 페이지 모두에 적용돼요.
 
 const SUPABASE_URL = 'https://krmsgpgondjbgxgivlhy.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_zx8xn87ziclyA4PuILsgjg_p5q_TsB3';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtybXNncGdvbmRqYmd4Z2l2bGh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4NjQyMjYsImV4cCI6MjEwNDQ0MDIyNn0.5tBudfvNLFtr_ZxJBfr9Olg7wMeGUS8pZChN0Ticx7k';
