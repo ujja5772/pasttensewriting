@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>우리 반 이야기 모음</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Gowun+Dodum&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<style>
+  :root{
+    --cream:#FBF3E3; --paper:#FFFDF8; --ink:#2B3A55; --ink-soft:#5C6B87;
+    --coral:#E8604C; --coral-dark:#C94B3A; --mint:#6FAF9E; --mint-dark:#4F8B7C;
+    --mustard:#E8AE3E; --line:#D8CBB0;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:radial-gradient(circle at 1px 1px, rgba(43,58,85,0.06) 1px, transparent 0) 0 0/22px 22px, var(--cream);
+    font-family:'Gowun Dodum', sans-serif; color:var(--ink); padding:24px 16px 60px;
+  }
+  .wrap{ max-width:1100px; margin:0 auto; }
+  header{ text-align:center; margin-bottom:22px; }
+  h1{ font-family:'Gaegu', cursive; font-size:2rem; margin:0 0 4px; }
+  .subtitle{ color:var(--ink-soft); margin:0 0 14px; }
+  .controls{ display:flex; gap:10px; justify-content:center; align-items:center; flex-wrap:wrap; }
+  .btn-outline{ font-family:'Gowun Dodum',sans-serif; border:2px solid var(--ink); border-radius:8px; padding:8px 16px;
+    background:#fff; cursor:pointer; font-size:0.9rem; }
+  .status{ color:var(--ink-soft); font-size:0.82rem; }
+
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(240px, 1fr)); gap:18px; margin-top:22px; }
+  .card{ background:var(--paper); border:2px solid var(--ink); border-radius:14px; overflow:hidden; box-shadow:4px 4px 0 var(--line); }
+  .card .photo{ width:100%; height:170px; background:#eee; object-fit:cover; display:block; }
+  .card .no-photo{ width:100%; height:170px; background:#FAF7EF; display:flex; align-items:center; justify-content:center; color:var(--ink-soft); font-size:0.85rem; }
+  .card .body{ padding:14px; }
+  .card .tag{ display:inline-block; background:var(--mustard); color:var(--ink); font-family:'Nunito',sans-serif; font-weight:800;
+    font-size:0.78rem; padding:3px 10px; border-radius:12px; margin-bottom:8px; }
+  .card .name{ font-family:'Gaegu',cursive; font-size:1.2rem; margin:0 0 6px; }
+  .card .text{ font-family:'Nunito',sans-serif; font-size:0.92rem; line-height:1.6; color:var(--ink); white-space:pre-wrap; }
+  .empty{ text-align:center; color:var(--ink-soft); margin-top:60px; font-size:1rem; }
+  footer{ text-align:center; color:var(--ink-soft); font-size:0.82rem; margin-top:30px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>🖼️ 우리 반 이야기 모음</h1>
+    <p class="subtitle">친구들이 완성한 영어 이야기를 함께 구경해요!</p>
+    <div class="controls">
+      <button class="btn-outline" onclick="loadGallery()">새로고침 🔄</button>
+      <span class="status" id="statusText"></span>
+    </div>
+  </header>
+
+  <div class="grid" id="galleryGrid"></div>
+  <div class="empty" id="emptyMsg" style="display:none;">아직 제출된 이야기가 없어요. 곧 여기에 친구들 이야기가 채워질 거예요! 😊</div>
+</div>
+<footer>Tr. Olivia · 5학년 영어 쓰기 활동</footer>
+
+<script>
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+async function loadGallery(){
+  const grid = document.getElementById('galleryGrid');
+  const emptyMsg = document.getElementById('emptyMsg');
+  const statusText = document.getElementById('statusText');
+  statusText.textContent = '불러오는 중...';
+  try{
+    const { data, error } = await supabaseClient
+      .from('submissions')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(100);
+    if(error) throw error;
+    const entries = data || [];
+    grid.innerHTML = '';
+    if(entries.length === 0){
+      emptyMsg.style.display = 'block';
+    }else{
+      emptyMsg.style.display = 'none';
+      entries.forEach(rec=>{
+        const card = document.createElement('div'); card.className='card';
+        const photoHtml = rec.photo_url
+          ? '<img class="photo" src="'+rec.photo_url+'" alt="student photo">'
+          : '<div class="no-photo">사진 없음</div>';
+        card.innerHTML = photoHtml +
+          '<div class="body">' +
+            '<span class="tag">'+(rec.class_number||'-')+'반 '+(rec.student_number||'-')+'번</span>' +
+            '<p class="name">'+escapeHtml(rec.name||'') +'</p>' +
+            '<p class="text">'+escapeHtml(rec.corrected || rec.draft || '')+'</p>' +
+          '</div>';
+        grid.appendChild(card);
+      });
+    }
+    statusText.textContent = new Date().toLocaleTimeString() + ' 기준';
+  }catch(e){
+    statusText.textContent = '불러오지 못했어요. (' + (e.message||e) + ')';
+  }
+}
+
+function escapeHtml(s){
+  const div = document.createElement('div');
+  div.textContent = s;
+  return div.innerHTML;
+}
+
+loadGallery();
+setInterval(loadGallery, 20000); // 20초마다 자동 새로고침
+</script>
+</body>
+</html>

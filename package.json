@@ -1,0 +1,6 @@
+{
+  "name": "my-story-postcard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "5학년 영어 과거형 글쓰기 활동 웹페이지 (넷리파이 + Supabase 버전)"
+}

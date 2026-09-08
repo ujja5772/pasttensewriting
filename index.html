@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>나의 특별한 하루 - 영어 엽서 쓰기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Gowun+Dodum&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<style>
+  :root{
+    --cream:#FBF3E3; --paper:#FFFDF8; --ink:#2B3A55; --ink-soft:#5C6B87;
+    --coral:#E8604C; --coral-dark:#C94B3A; --mint:#6FAF9E; --mint-dark:#4F8B7C;
+    --mustard:#E8AE3E; --tape-blue:#A9C9E0; --tape-pink:#F2B8C6; --tape-mint:#BFE0D3; --line:#D8CBB0;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    background:radial-gradient(circle at 1px 1px, rgba(43,58,85,0.06) 1px, transparent 0) 0 0/22px 22px, var(--cream);
+    font-family:'Gowun Dodum', sans-serif; color:var(--ink); padding:28px 16px 80px;
+  }
+  .page{ max-width:880px; margin:0 auto; }
+
+  .postcard-header{ position:relative; background:var(--paper); border:2px solid var(--ink); border-radius:14px;
+    padding:26px 28px 22px; margin-bottom:26px; box-shadow:5px 5px 0 var(--line); }
+  .tape{ position:absolute; width:70px; height:26px; opacity:0.85; }
+  .tape.tl{ top:-14px; left:24px; background:var(--tape-blue); transform:rotate(-6deg); }
+  .tape.tr{ top:-12px; right:30px; background:var(--tape-pink); transform:rotate(8deg); }
+  .stamp-icon{ position:absolute; top:18px; right:22px; width:56px; height:68px; border:2px dashed var(--coral);
+    border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:28px; background:#fff; transform:rotate(6deg); }
+  h1{ font-family:'Gaegu', cursive; font-size:2.2rem; margin:0 0 4px; }
+  .subtitle{ color:var(--ink-soft); font-size:1rem; margin:0; }
+  .intro-row{ display:flex; gap:14px; flex-wrap:wrap; margin-top:18px; }
+  .intro-field{ flex:1; min-width:110px; }
+  .intro-field.wide{ min-width:180px; flex:1.6; }
+  .intro-field label{ font-size:0.85rem; color:var(--ink-soft); display:block; margin-bottom:4px; }
+  .intro-field input{ width:100%; border:none; border-bottom:2px dashed var(--line); background:transparent;
+    font-family:'Nunito',sans-serif; font-size:1rem; font-weight:700; padding:6px 2px; color:var(--ink); }
+  .intro-field input:focus{ outline:none; border-bottom-color:var(--coral); }
+
+  .section{ background:var(--paper); border:2px solid var(--ink); border-radius:14px; padding:24px 26px;
+    margin-bottom:22px; box-shadow:5px 5px 0 var(--line); }
+  .section h2{ font-family:'Gaegu', cursive; font-size:1.5rem; margin:0 0 6px; }
+  .section .hint{ color:var(--ink-soft); font-size:0.92rem; margin:0 0 16px; }
+
+  .two-col{ display:flex; gap:20px; flex-wrap:wrap; }
+  .two-col > div{ flex:1; min-width:280px; }
+
+  .wordmap-box{ background:#FAF7EF; border:2px solid var(--ink); border-radius:10px; padding:16px; }
+  .wordmap-example{ margin-bottom:16px; } .wordmap-example:last-child{ margin-bottom:0; }
+  .wordmap-row{ display:flex; flex-wrap:wrap; gap:6px; margin:6px 0; align-items:center; }
+  .chip-static{ font-family:'Nunito',sans-serif; font-weight:700; font-size:0.85rem; padding:5px 10px; border-radius:16px; color:#fff; }
+  .c-blue{ background:#6E96C4; } .c-orange{ background:var(--mustard); } .c-green{ background:var(--mint-dark); } .c-pink{ background:#D77E9A; }
+  .arrow-down{ text-align:center; color:var(--ink-soft); font-size:1.1rem; margin:2px 0; }
+  .kr-order{ font-size:0.85rem; color:var(--ink-soft); }
+
+  .verb-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:8px; }
+  .verb-pair{ background:#FAF7EF; border:1px solid var(--line); border-radius:8px; padding:8px 10px;
+    font-family:'Nunito',sans-serif; font-size:0.9rem; text-align:center; }
+  .verb-pair b{ color:var(--coral-dark); }
+  .verb-pair .kr{ display:block; font-family:'Gowun Dodum',sans-serif; font-size:0.76rem; color:var(--ink-soft); margin-top:2px; }
+
+  .helper-row{ display:flex; gap:8px; flex-wrap:wrap; }
+  .helper-row input{ flex:1; min-width:180px; border:1.5px solid var(--line); border-radius:8px; padding:9px 12px;
+    font-family:'Gowun Dodum',sans-serif; font-size:1rem; }
+  .btn{ font-family:'Gowun Dodum',sans-serif; border:2px solid var(--ink); border-radius:8px; padding:9px 18px;
+    font-size:0.95rem; cursor:pointer; background:var(--mustard); font-weight:700; color:var(--ink); }
+  .btn:hover{ filter:brightness(1.05); } .btn:disabled{ opacity:0.55; cursor:default; }
+  .vocab-result{ margin-top:14px; display:none; }
+  .vocab-card{ background:#FAF7EF; border:1.5px solid var(--mint-dark); border-radius:10px; padding:12px 14px; margin-bottom:8px; }
+  .vocab-card .word{ font-family:'Nunito',sans-serif; font-weight:800; color:var(--mint-dark); font-size:1.1rem; }
+  .vocab-card .ex{ font-size:0.9rem; color:var(--ink-soft); margin-top:4px; font-family:'Nunito',sans-serif;}
+
+  .chat-box{ border:2px solid var(--ink); border-radius:10px; background:#FAF7EF; padding:14px;
+    max-height:380px; overflow-y:auto; margin-bottom:12px; display:flex; flex-direction:column; gap:10px; }
+  .msg{ max-width:82%; padding:10px 14px; border-radius:14px; font-size:0.95rem; line-height:1.5; }
+  .msg.bot{ align-self:flex-start; background:#fff; border:1.5px solid var(--ink); border-bottom-left-radius:4px; }
+  .msg.user{ align-self:flex-end; background:var(--mint); color:#fff; border-bottom-right-radius:4px; }
+  .chat-input-row{ display:flex; gap:8px; }
+  .chat-input-row input{ flex:1; border:1.5px solid var(--line); border-radius:20px; padding:9px 16px;
+    font-family:'Gowun Dodum',sans-serif; font-size:0.95rem; }
+  .chat-input-row button{ border-radius:20px; }
+  .chat-done-note{ text-align:center; color:var(--ink-soft); font-size:0.85rem; margin-top:8px; }
+
+  .path-choice{ display:flex; gap:16px; flex-wrap:wrap; justify-content:center; margin-top:18px; }
+  .path-btn{ flex:1; min-width:220px; border:2px solid var(--ink); border-radius:12px; background:#fff;
+    padding:18px; cursor:pointer; text-align:center; font-family:'Gaegu',cursive; font-size:1.15rem; }
+  .path-btn:hover{ background:var(--mustard); }
+  .path-btn.chosen{ background:var(--mint); color:#fff; }
+  .path-btn .desc{ font-family:'Gowun Dodum',sans-serif; font-size:0.85rem; color:var(--ink-soft); margin-top:6px; }
+  .path-btn.chosen .desc{ color:#fff; }
+
+  .hint-group{ margin-bottom:10px; }
+  .hint-label{ font-size:0.8rem; color:var(--ink-soft); margin-bottom:4px; }
+  .hint-chips{ display:flex; flex-wrap:wrap; gap:6px; }
+  .chip{ font-family:'Nunito',sans-serif; font-weight:700; background:#fff; border:1.5px solid var(--mint-dark);
+    color:var(--mint-dark); border-radius:18px; padding:7px 14px; cursor:pointer; font-size:0.9rem; }
+  .chip:hover{ background:var(--mint); color:#fff; }
+  .chip.hint{ border-color:var(--mustard); color:var(--coral-dark); }
+  .chip.hint:hover{ background:var(--mustard); color:#fff; }
+  .chip small{ display:block; font-family:'Gowun Dodum',sans-serif; font-weight:400; font-size:0.7rem; opacity:0.85;}
+
+  .frame-line{ font-family:'Nunito',sans-serif; font-size:1.15rem; line-height:2.4; margin-bottom:2px; }
+  .frame-line .num{ display:inline-block; width:22px; height:22px; line-height:22px; text-align:center;
+    background:var(--coral); color:#fff; border-radius:50%; font-size:0.8rem; font-weight:800; margin-right:6px; }
+  .blank{ border:none; border-bottom:2.5px solid var(--ink); background:transparent; font-family:'Nunito',sans-serif;
+    font-weight:700; font-size:1.05rem; padding:2px 4px; min-width:110px; color:var(--coral-dark); text-align:center; }
+  .blank:focus{ outline:none; border-bottom-color:var(--mint-dark); background:#FAF7EF; }
+  .kr-note{ display:block; font-size:0.78rem; color:var(--ink-soft); margin:-2px 0 14px 28px; }
+  textarea.extra, textarea.freewrite, textarea.practice{ width:100%; min-height:80px; border:1.5px dashed var(--line);
+    border-radius:8px; padding:10px; font-family:'Nunito',sans-serif; font-size:1rem; resize:vertical; background:#FAF7EF; }
+  textarea.freewrite{ min-height:140px; }
+
+  .tabs{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom:14px; }
+  .tab-btn{ font-family:'Gowun Dodum',sans-serif; border:2px solid var(--ink); background:#fff; border-radius:20px;
+    padding:6px 14px; cursor:pointer; font-size:0.9rem; }
+  .tab-btn.active{ background:var(--ink); color:#fff; }
+  .chip-panel{ display:none; flex-wrap:wrap; gap:8px; } .chip-panel.active{ display:flex; }
+
+  details summary{ cursor:pointer; font-family:'Gaegu',cursive; font-size:1.15rem; list-style:none; }
+  details summary::-webkit-details-marker{ display:none; }
+  details summary:before{ content:"▸ "; } details[open] summary:before{ content:"▾ "; }
+
+  .submit-wrap{ text-align:center; }
+  .stamp-btn{ font-family:'Gaegu', cursive; font-size:1.4rem; background:var(--coral); color:#fff; border:none;
+    border-radius:14px; padding:16px 40px; cursor:pointer; box-shadow:4px 4px 0 var(--coral-dark); }
+  .stamp-btn:hover{ transform:translateY(-2px); } .stamp-btn:disabled{ opacity:0.6; cursor:default; }
+  .loading-msg{ margin-top:12px; color:var(--ink-soft); font-size:0.95rem; display:none; }
+
+  .letter{ display:none; background:#FFFDF6; border:2px solid var(--ink); border-radius:14px; padding:24px 26px;
+    margin-top:24px; box-shadow:5px 5px 0 var(--line); }
+  .letter .badge{ display:inline-block; background:var(--mustard); color:var(--ink); font-family:'Gaegu',cursive;
+    font-weight:700; font-size:1.1rem; padding:6px 16px; border-radius:20px; margin-bottom:12px; }
+  .letter h3{ font-family:'Gaegu',cursive; font-size:1.3rem; margin:0 0 10px; }
+  .letter .corrected-box{ background:#F3F8F6; border-left:4px solid var(--mint-dark); padding:12px 14px; border-radius:6px;
+    font-family:'Nunito',sans-serif; font-size:1.05rem; line-height:1.7; margin-bottom:14px; white-space:pre-wrap; }
+  .letter ul{ padding-left:20px; margin:0 0 14px; } .letter li{ margin-bottom:6px; }
+  .attempt-tag{ font-size:0.85rem; color:var(--ink-soft); margin-bottom:8px; }
+  .letter .actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+  .btn-outline{ font-family:'Gowun Dodum',sans-serif; border:2px solid var(--ink); border-radius:8px; padding:8px 16px;
+    background:#fff; cursor:pointer; font-size:0.9rem; }
+  .error-msg{ color:var(--coral-dark); background:#FBEAE7; border:1.5px solid var(--coral); border-radius:8px;
+    padding:10px 14px; margin-top:10px; font-size:0.9rem; display:none; }
+
+  .practice-box{ display:none; margin-top:22px; border-top:2px dashed var(--line); padding-top:18px; }
+  .practice-result{ margin-top:8px; font-size:0.9rem; display:none; padding:8px 12px; border-radius:8px; }
+  .practice-result.ok{ background:#EAF5F0; color:var(--mint-dark); }
+  .practice-result.retry{ background:#FDF3E3; color:var(--coral-dark); }
+
+  .illust-section{ margin-top:22px; border-top:2px dashed var(--line); padding-top:18px; }
+  .illust-box{ border:2px dashed var(--line); border-radius:10px; background:#fff; padding:10px; text-align:center;
+    min-height:180px; display:flex; align-items:center; justify-content:center; }
+  .illust-box svg{ width:100%; max-width:380px; height:auto; }
+  .illust-box img{ width:100%; max-width:380px; height:auto; border-radius:8px; }
+  .paste-pad{ border:2px dashed var(--line); border-radius:10px; padding:18px; text-align:center;
+    color:var(--ink-soft); cursor:text; margin:6px 0 10px; background:#FAF7EF; font-size:0.9rem; }
+  .paste-pad:focus{ outline:2px solid var(--mint-dark); }
+  .photo-controls-row{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+  .photo-results{ display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:10px; }
+  .photo-results img{ width:100%; height:80px; object-fit:cover; border-radius:8px; cursor:pointer;
+    border:2px solid transparent; }
+  .photo-results img:hover{ border-color:var(--mint-dark); }
+  .attribution{ font-size:0.72rem; color:var(--ink-soft); margin-top:4px; }
+  .attribution a{ color:var(--ink-soft); }
+
+  .save-note{ font-size:0.82rem; color:var(--ink-soft); margin-top:8px; }
+  .confirm-msg{ display:none; background:#EAF5F0; border:1.5px solid var(--mint-dark); color:var(--mint-dark);
+    border-radius:8px; padding:10px 14px; margin-top:10px; font-size:0.9rem; }
+  .entry-card{ border:1px solid var(--line); border-radius:8px; padding:10px 12px; margin-bottom:8px; background:#FAF7EF; font-size:0.88rem; }
+  .entry-card .ename{ font-weight:800; font-family:'Nunito',sans-serif; margin-right:6px; }
+  .entry-card .etag{ display:inline-block; background:#fff; border:1px solid var(--line); border-radius:10px; padding:1px 8px; font-size:0.76rem; margin-right:6px; color:var(--ink-soft); }
+  .entry-card .etime{ color:var(--ink-soft); font-size:0.78rem; }
+
+  footer{ text-align:center; color:var(--ink-soft); font-size:0.85rem; margin-top:10px; }
+  .hidden{ display:none !important; }
+
+  @media (max-width:600px){ h1{ font-size:1.8rem; } .stamp-icon{ display:none; } .section, .postcard-header{ padding:18px; } }
+  @media print{ .no-print{ display:none !important; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="postcard-header">
+    <div class="tape tl"></div><div class="tape tr"></div>
+    <div class="stamp-icon">✉️</div>
+    <h1>나의 특별한 하루</h1>
+    <p class="subtitle">과거형 영어로 써보기</p>
+    <div class="intro-row">
+      <div class="intro-field"><label>반 (Class)</label><input type="text" id="classField" placeholder="예: 3" inputmode="numeric"></div>
+      <div class="intro-field"><label>번호 (No.)</label><input type="text" id="numberField" placeholder="예: 12" inputmode="numeric"></div>
+      <div class="intro-field wide"><label>내 이름 (Name)</label><input type="text" id="studentName" placeholder="예: 김하늘"></div>
+    </div>
+    <div class="submit-wrap" style="margin-top:16px;">
+      <button class="stamp-btn" id="startGateBtn" onclick="startActivity()">✍️ 시작하기</button>
+    </div>
+  </div>
+
+  <div id="mainContent" class="hidden">
+
+  <!-- 1. 복습: 어순 + 과거형 단어 -->
+  <div class="section">
+    <h2>🧭 다시 기억해보기</h2>
+    <p class="hint">글을 쓰기 전에, 한국어와 영어의 순서 차이와 자주 쓰는 과거형 단어를 먼저 살펴봐요.</p>
+    <div class="two-col">
+      <div class="wordmap-box">
+        <div class="wordmap-example">
+          <div class="kr-order">한국어: 나는 + 어제 + 제주도에 + 갔다</div>
+          <div class="wordmap-row"><span class="chip-static c-blue">나는</span><span class="chip-static c-pink">어제</span><span class="chip-static c-green">제주도에</span><span class="chip-static c-orange">갔다</span></div>
+          <div class="arrow-down">⬇ 영어는 순서가 달라요!</div>
+          <div class="wordmap-row"><span class="chip-static c-blue">I</span><span class="chip-static c-orange">went</span><span class="chip-static c-green">to Jeju</span><span class="chip-static c-pink">yesterday</span></div>
+        </div>
+        <div class="wordmap-example">
+          <div class="kr-order">한국어: 나는 + 피자를 + 먹었다</div>
+          <div class="wordmap-row"><span class="chip-static c-blue">나는</span><span class="chip-static c-green">피자를</span><span class="chip-static c-orange">먹었다</span></div>
+          <div class="arrow-down">⬇</div>
+          <div class="wordmap-row"><span class="chip-static c-blue">I</span><span class="chip-static c-orange">ate</span><span class="chip-static c-green">pizza</span></div>
+        </div>
+        <p class="kr-note" style="margin:8px 0 0;">💡 영어는 <b>누가(I) → 했다(went/ate) → 무엇을/어디에</b> 순서로 써요!</p>
+      </div>
+      <div>
+        <p class="hint" style="margin-bottom:8px;">자주 쓰는 과거형 단어예요. (원래 뜻 → 과거형(뜻))</p>
+        <div class="verb-grid" id="verbGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 단어 도우미 -->
+  <div class="section">
+    <h2>🔤 이 단어, 영어로 뭐예요?</h2>
+    <p class="hint">쓰고 싶은 한국어 단어를 입력하면 쉬운 영어 단어를 알려드려요. 글 쓰는 동안 언제든 물어보세요!</p>
+    <div class="helper-row">
+      <input type="text" id="vocabInput" placeholder="예: 무서웠다, 놀이공원, 떡볶이...">
+      <button class="btn" id="vocabBtn" onclick="askVocab()">물어보기 🔍</button>
+    </div>
+    <div class="loading-msg" id="vocabLoading">선생님이 단어를 찾고 있어요...</div>
+    <div class="vocab-result" id="vocabResult"></div>
+  </div>
+
+  <!-- 3. 대화로 이야기 준비하기 -->
+  <div class="section" id="chatSection">
+    <h2>💬 이야기 준비하기</h2>
+    <p class="hint">선생님과 이야기하면서 오늘 쓸 이야기를 떠올려봐요.</p>
+    <div class="chat-box" id="chatBox"></div>
+    <div class="chat-input-row">
+      <input type="text" id="chatInput" placeholder="여기에 대답을 적어보세요" onkeydown="if(event.key==='Enter')sendChatMessage();">
+      <button class="btn" id="chatSendBtn" onclick="sendChatMessage()">보내기 💬</button>
+    </div>
+    <div class="loading-msg" id="chatLoading">선생님이 생각하고 있어요...</div>
+    <div class="error-msg" id="chatError">앗, 지금은 대답할 수 없어요. 다시 눌러주세요!</div>
+
+    <div id="pathChoiceBox" class="hidden">
+      <p class="chat-done-note">이제 어떻게 이야기를 써볼까요?</p>
+      <div class="path-choice">
+        <div class="path-btn" id="slowBtn" onclick="choosePath('slow')">🐢 천천히 만들면서 쓰기
+          <div class="desc">우리 대화를 바탕으로 만든 문장에서 과거형만 채워요</div></div>
+        <div class="path-btn" id="fastBtn" onclick="choosePath('fast')">🚀 내가 바로 영어로 쓰기
+          <div class="desc">힌트 단어를 참고해서 직접 영어로 자유롭게 써요</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4a. 느린 학습자: 대화 기반 문장 채우기 -->
+  <div class="section hidden" id="slowSection">
+    <h2>✏️ 문장 조립소</h2>
+    <p class="hint">우리가 나눈 이야기를 바탕으로 문장을 만들었어요. 빈칸에 알맞은 <b>과거형 단어</b>를 채워보세요. (위 "다시 기억해보기" 카드를 참고하세요!)</p>
+    <div class="loading-msg" id="framesLoading">우리 대화로 문장을 만들고 있어요...</div>
+    <div id="dynamicFrames"></div>
+
+    <p class="hint" style="margin-top:14px;">✨ 더 쓰고 싶은 이야기가 있나요? 자유롭게 써보세요.</p>
+    <textarea class="extra" id="extraText" placeholder="예: My dog came with us too. I want to go there again."></textarea>
+
+    <details style="margin-top:18px;">
+      <summary>📚 단어장 더 보기</summary>
+      <p class="hint" style="margin-top:10px;">빈칸을 눌러 커서를 놓고 단어를 클릭하면 채워져요.</p>
+      <div class="tabs" id="tabBar"></div>
+      <div id="chipArea"></div>
+    </details>
+
+    <div class="submit-wrap" style="margin-top:20px;">
+      <button class="stamp-btn" id="submitBtnSlow" onclick="submitForFeedback()">선생님께 검사받기 💌</button>
+    </div>
+  </div>
+
+  <!-- 4b. 빠른 학습자: 자유 작문 -->
+  <div class="section hidden" id="fastSection">
+    <h2>🚀 내 이야기 쓰기</h2>
+    <p class="hint">이야기한 내용을 떠올리며, 과거형을 이용해서 자유롭게 영어로 써보세요. 막히면 아래 힌트 단어를 참고하세요.</p>
+    <div class="loading-msg" id="fastHintLoading">힌트 단어를 만들고 있어요...</div>
+    <div id="fastHintBox"></div>
+    <textarea class="freewrite" id="freeDraft" placeholder="Last weekend, I went to..."></textarea>
+    <div class="submit-wrap" style="margin-top:16px;">
+      <button class="stamp-btn" id="submitBtnFast" onclick="submitForFeedback()">선생님께 검사받기 💌</button>
+    </div>
+  </div>
+
+  <div class="loading-msg no-print" id="feedbackLoading" style="text-align:center;">선생님이 편지를 쓰고 있어요... ✏️</div>
+  <div class="error-msg no-print" id="feedbackError" style="max-width:880px;margin:0 auto;">앗, 지금은 편지를 받을 수 없어요. 잠시 후 다시 눌러주세요!</div>
+
+  <!-- 5. 첨삭 편지 -->
+  <div class="letter" id="letterBox">
+    <div class="attempt-tag" id="attemptTag"></div>
+    <div class="badge" id="badgeText"></div>
+    <h3 id="greetingText"></h3>
+    <p style="font-size:0.85rem;color:var(--ink-soft);margin:-6px 0 6px;">✅ 고친 글</p>
+    <div class="corrected-box" id="correctedText"></div>
+    <p style="font-size:0.85rem;color:var(--ink-soft);margin:0 0 6px;">💡 이렇게 고치면 더 좋아요</p>
+    <ul id="tipsList"></ul>
+    <div class="actions">
+      <button class="btn-outline" onclick="rewriteAgain()">✍️ 다시 고쳐쓰기</button>
+      <button class="btn-outline" onclick="window.print()">🖨️ 인쇄하기</button>
+      <button class="btn-outline" onclick="copyFinal()">📋 복사하기</button>
+    </div>
+
+    <div class="practice-box" id="practiceBox">
+      <h3>✍️ 이제 내 손으로 따라 써보기</h3>
+      <p class="hint">위에서 고친 문장을 보면서, 아래 칸에 직접 타이핑해서 따라 써보세요. 과거형 단어를 손으로 직접 써보면 더 잘 기억나요!</p>
+      <textarea class="practice" id="practiceInput" placeholder="여기에 따라 써보세요..."></textarea>
+      <button class="btn-outline" style="margin-top:8px;" onclick="checkPractice()">확인하기 ✅</button>
+      <div class="practice-result" id="practiceResult"></div>
+    </div>
+
+    <div class="illust-section">
+      <h3>📷 내 사진 넣기</h3>
+      <p class="hint">그날 찍은 사진이나 그린 그림을 올리거나, 복사한 이미지를 붙여넣어보세요.</p>
+      <div class="photo-controls-row">
+        <input type="file" id="photoFileInput" accept="image/*" style="display:none">
+        <button class="btn-outline" onclick="document.getElementById('photoFileInput').click()">📁 사진 올리기</button>
+        <button class="btn-outline" onclick="searchPhoto()">🔍 사진 검색하기</button>
+      </div>
+      <div class="paste-pad" id="pastePad" tabindex="0">여기를 클릭하고 Ctrl+V(붙여넣기)로 이미지를 넣어보세요</div>
+      <div class="loading-msg" id="photoSearchLoading">어울리는 사진을 찾고 있어요...</div>
+      <div class="photo-results hidden" id="photoResults"></div>
+      <div class="illust-box" id="illustBox">아직 사진이 없어요</div>
+    </div>
+
+    <div class="illust-section">
+      <h3>💌 완성했어요!</h3>
+      <p class="hint">완성한 이야기를 선생님께 최종 제출해요.</p>
+      <button class="stamp-btn" onclick="saveFinal(this)">선생님께 제출하기 📮</button>
+      <p class="save-note">⚠️ 제출한 내용은 이 페이지를 함께 쓰는 친구들과 선생님도 볼 수 있어요.</p>
+      <div class="confirm-msg" id="saveConfirm"></div>
+      <p style="margin-top:10px;"><a href="gallery.html" target="_blank">🖼️ 우리 반 이야기 모음 보러가기</a></p>
+    </div>
+  </div>
+
+  </div><!-- /mainContent -->
+
+  <!-- 선생님 전용 -->
+  <div class="section no-print">
+    <details>
+      <summary>👩‍🏫 선생님 전용 - 제출함 보기</summary>
+      <div style="margin-top:12px;">
+        <p class="hint">같은 사이트 주소로 다른 학생이 제출한 내용도 여기에 함께 모여요. 확인 번호를 입력해야 볼 수 있어요.</p>
+        <button class="btn-outline" onclick="loadTeacherView()">불러오기 🔄</button>
+        <button class="btn-outline hidden" id="csvBtn" onclick="downloadCSV()">CSV로 다운로드 ⬇️</button>
+        <div id="teacherList" style="margin-top:14px;"></div>
+      </div>
+    </details>
+  </div>
+
+  <footer>Tr. Olivia · 5학년 영어 쓰기 활동</footer>
+</div>
+
+<script>
+/* 선생님만 아는 번호로 바꿔서 사용하세요 */
+const TEACHER_PIN = '1234';
+
+/* SUPABASE_URL / SUPABASE_ANON_KEY 는 config.js 에서 불러와요. */
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+let photoBlob = null;
+let selectedPhotoUrl = null;
+
+const wordBank = {
+  "장소": [{en:"the park",kr:"공원"},{en:"the beach",kr:"바닷가"},{en:"the zoo",kr:"동물원"},{en:"Jeju Island",kr:"제주도"},{en:"my grandmother's house",kr:"할머니 댁"},{en:"the amusement park",kr:"놀이공원"},{en:"the museum",kr:"박물관"},{en:"the library",kr:"도서관"},{en:"school",kr:"학교"},{en:"the mountain",kr:"산"}],
+  "음식": [{en:"pizza",kr:"피자"},{en:"ice cream",kr:"아이스크림"},{en:"tteokbokki",kr:"떡볶이"},{en:"chicken",kr:"치킨"},{en:"kimbap",kr:"김밥"},{en:"watermelon",kr:"수박"},{en:"spaghetti",kr:"스파게티"},{en:"bibimbap",kr:"비빔밥"},{en:"ramen",kr:"라면"},{en:"chocolate cake",kr:"초콜릿 케이크"}],
+  "활동": [{en:"played soccer",kr:"축구를 했다"},{en:"rode a bike",kr:"자전거를 탔다"},{en:"watched a movie",kr:"영화를 봤다"},{en:"went swimming",kr:"수영을 했다"},{en:"took pictures",kr:"사진을 찍었다"},{en:"played badminton",kr:"배드민턴을 쳤다"},{en:"drew pictures",kr:"그림을 그렸다"},{en:"went fishing",kr:"낚시를 했다"},{en:"went camping",kr:"캠핑을 했다"},{en:"played video games",kr:"게임을 했다"}],
+  "기분&맛": [{en:"happy",kr:"행복한"},{en:"excited",kr:"신난"},{en:"tired",kr:"피곤한"},{en:"surprised",kr:"놀란"},{en:"a little scared",kr:"조금 무서운"},{en:"proud",kr:"뿌듯한"},{en:"delicious",kr:"맛있는"},{en:"sweet",kr:"단"},{en:"spicy",kr:"매운"},{en:"amazing",kr:"멋진"}],
+  "사람": [{en:"my family",kr:"우리 가족"},{en:"my friend",kr:"내 친구"},{en:"my mom",kr:"엄마"},{en:"my dad",kr:"아빠"},{en:"my sister",kr:"언니/누나/여동생"},{en:"my brother",kr:"형/오빠/남동생"},{en:"my grandmother",kr:"할머니"},{en:"my classmates",kr:"우리 반 친구들"},{en:"my dog",kr:"우리 강아지"},{en:"alone",kr:"혼자"}]
+};
+const verbPairs = [
+  ["go","went","갔다"],["eat","ate","먹었다"],["see","saw","봤다"],["have","had","가졌다/있었다"],["take","took","가져갔다/탔다"],
+  ["buy","bought","샀다"],["meet","met","만났다"],["make","made","만들었다"],["do","did","했다"],["get","got","받았다/얻었다"],
+  ["give","gave","줬다"],["come","came","왔다"],["run","ran","달렸다"],["write","wrote","썼다"],["ride","rode","탔다"],
+  ["swim","swam","수영했다"],["play","played","놀았다/했다"],["watch","watched","봤다"],["feel","felt","느꼈다"],["draw","drew","그렸다"]
+];
+
+let lastFocused = null;
+let attemptCount = 0;
+let mode = null;
+let chatHistory = [];
+let userTurnCount = 0;
+let chatDone = false;
+let storySummary = {when:"",place:"",person:"",activity:"",seen:"",feeling:""};
+let vocabHintCache = null;
+let slowFramesCache = null;
+let slowFrameInputs = [];
+let lastDraft = "";
+let lastCorrected = "";
+let lastLoadedEntries = [];
+
+function init(){
+  const tabBar = document.getElementById('tabBar');
+  const chipArea = document.getElementById('chipArea');
+  Object.keys(wordBank).forEach((cat,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (i===0?' active':'');
+    btn.type = 'button'; btn.textContent = cat;
+    btn.onclick = ()=> switchTab(cat);
+    tabBar.appendChild(btn);
+    const panel = document.createElement('div');
+    panel.className = 'chip-panel' + (i===0?' active':'');
+    panel.id = 'panel-'+cat;
+    wordBank[cat].forEach(w=>{
+      const chip = document.createElement('button');
+      chip.className='chip'; chip.type='button';
+      chip.innerHTML = w.en + '<small>'+w.kr+'</small>';
+      chip.onclick = ()=> insertWord(w.en);
+      panel.appendChild(chip);
+    });
+    chipArea.appendChild(panel);
+  });
+
+  const grid = document.getElementById('verbGrid');
+  verbPairs.forEach(([b,p,kr])=>{
+    const d = document.createElement('div'); d.className='verb-pair';
+    d.innerHTML = b + ' → <b>' + p + '</b><span class="kr">('+kr+')</span>';
+    grid.appendChild(d);
+  });
+
+  const freeDraftEl = document.getElementById('freeDraft');
+  freeDraftEl.addEventListener('focus', ()=>{ lastFocused = freeDraftEl; });
+  lastFocused = freeDraftEl;
+
+  document.getElementById('photoFileInput').addEventListener('change', (e)=>{
+    const f = e.target.files[0];
+    if(f) setPhoto(f);
+  });
+  document.getElementById('pastePad').addEventListener('paste', (e)=>{
+    const items = (e.clipboardData || window.clipboardData).items;
+    for(const item of items){
+      if(item.type.indexOf('image') !== -1){
+        const blob = item.getAsFile();
+        setPhoto(blob);
+        e.preventDefault();
+        break;
+      }
+    }
+  });
+
+  addBotBubble("안녕! 오늘은 어떤 이야기를 써볼까? 어제 있었던 일이야? 주말? 여름방학? 아니면 더 예전의 일이야? 편하게 이야기해줘 😊");
+}
+
+function switchTab(cat){
+  document.querySelectorAll('.tab-btn').forEach(b=> b.classList.toggle('active', b.textContent===cat));
+  document.querySelectorAll('.chip-panel').forEach(p=> p.classList.toggle('active', p.id==='panel-'+cat));
+}
+function insertWord(word){
+  if(!lastFocused) lastFocused = document.getElementById('freeDraft');
+  if(lastFocused.tagName === 'TEXTAREA'){
+    const el = lastFocused;
+    const start = el.selectionStart==null? el.value.length : el.selectionStart;
+    const end = el.selectionEnd==null? el.value.length : el.selectionEnd;
+    const before = el.value.substring(0,start), after = el.value.substring(end);
+    const needsSpace = before && !/\s$/.test(before);
+    const insertText = (needsSpace?' ':'') + word;
+    el.value = before + insertText + after;
+    const pos = (before+insertText).length;
+    el.focus(); el.setSelectionRange(pos,pos);
+  }else{
+    lastFocused.value = word; lastFocused.focus();
+  }
+}
+
+async function callClaudeRaw(system, messages, maxTokens){
+  // 넷리파이 함수(/api/chat)가 서버에서 무료 Gemini API 키로 대신 요청해줘요.
+  const response = await fetch("/api/chat", {
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({ max_tokens: maxTokens||1000, system:system, messages:messages })
+  });
+  const data = await response.json();
+  if(data.error){ throw new Error(data.error); }
+  const text = (data.content||[]).map(b=>b.text||"").join("\n");
+  return text.replace(/```json|```svg|```/g,"").trim();
+}
+async function callClaudeJSON(system, messages, maxTokens){
+  const text = await callClaudeRaw(system, messages, maxTokens);
+  return JSON.parse(text);
+}
+
+async function askVocab(){
+  const input = document.getElementById('vocabInput');
+  const word = input.value.trim();
+  if(!word) return;
+  const loadBox = document.getElementById('vocabLoading');
+  const resultBox = document.getElementById('vocabResult');
+  document.getElementById('vocabBtn').disabled = true;
+  loadBox.style.display='block'; resultBox.style.display='none';
+  const system = `너는 한국 초등학교 5학년 학생에게 쉬운 영어 단어를 알려주는 친절한 선생님이야.
+학생이 한국어 단어나 표현을 입력하면, 5학년 수준(아주 쉬운 초급)에 맞는 영어 단어나 짧은 표현을 1~3개 알려줘.
+반드시 아래 JSON 형식으로만 답해. 다른 설명은 절대 하지 마:
+{"options":[{"word":"영어 단어나 표현","example":"그 단어를 사용한 아주 쉬운 과거형 예문 한 문장(5학년 수준)"}]}`;
+  try{
+    const result = await callClaudeJSON(system, [{role:"user",content:word}]);
+    resultBox.innerHTML = '';
+    (result.options||[]).forEach(o=>{
+      const card = document.createElement('div'); card.className='vocab-card';
+      card.innerHTML = '<span class="word">'+o.word+'</span><div class="ex">'+(o.example||'')+'</div>';
+      resultBox.appendChild(card);
+    });
+    resultBox.style.display='block';
+  }catch(e){
+    resultBox.innerHTML = '<div class="vocab-card">앗, 지금은 찾을 수 없어요. 다시 눌러주세요!</div>';
+    resultBox.style.display='block';
+  }finally{
+    document.getElementById('vocabBtn').disabled=false; loadBox.style.display='none';
+  }
+}
+
+function addBotBubble(text){
+  const box = document.getElementById('chatBox');
+  const div = document.createElement('div'); div.className='msg bot'; div.textContent=text;
+  box.appendChild(div); box.scrollTop = box.scrollHeight;
+}
+function addUserBubble(text){
+  const box = document.getElementById('chatBox');
+  const div = document.createElement('div'); div.className='msg user'; div.textContent=text;
+  box.appendChild(div); box.scrollTop = box.scrollHeight;
+}
+
+async function sendChatMessage(){
+  if(chatDone) return;
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if(!msg) return;
+  addUserBubble(msg);
+  input.value = '';
+  chatHistory.push({role:"user", content: msg});
+  userTurnCount += 1;
+
+  const loadBox = document.getElementById('chatLoading');
+  const errBox = document.getElementById('chatError');
+  errBox.style.display='none';
+  document.getElementById('chatSendBtn').disabled = true;
+  document.getElementById('chatInput').disabled = true;
+  loadBox.style.display='block';
+
+  let system = `너는 한국 초등학교 5학년 학생이 영어로 자신의 경험을 쓰기 전에, 기억을 떠올리도록 도와주는 다정한 선생님이야.
+학생과 한국어로 대화하면서 아래 정보를 하나씩 자연스럽게 물어봐:
+- when: 언제 있었던 일인지 (어제/주말/여름방학/그 이전 등)
+- place: 어디에 갔었는지 또는 무엇을 했는지
+- person: 누구와 함께 있었는지
+- activity: 거기서 무엇을 했는지
+- seen: 무엇을 봤는지
+- feeling: 기분이 어땠는지
+규칙:
+1. 한 번에 질문 하나만, 짧고 친근하게 해.
+2. 학생의 답을 반영해서 자연스럽게 다음 질문으로 이어가고, 이미 아는 정보는 다시 묻지 마.
+3. when, place, activity, feeling 중 최소 3가지 이상을 알게 되면 대화를 마무리해도 좋아. 최대 6번의 질문을 넘기지 마.
+4. 마무리할 때는 따뜻한 응원의 말을 하고 done을 true로 해.
+5. 반드시 아래 JSON 형식으로만 답해. 다른 말은 절대 하지 마:
+{"reply":"학생에게 보여줄 말(한국어)","done":false,"summary":{"when":"","place":"","person":"","activity":"","seen":"","feeling":""}}
+summary는 지금까지 대화에서 알아낸 내용을 한국어로 간단히 채워. 모르면 빈 문자열로 둬.`;
+  if(userTurnCount >= 6){
+    system += `\n지금까지 충분한 이야기를 들었으니, 이번 답변에서는 꼭 마무리하고 done을 true로 해.`;
+  }
+
+  try{
+    const result = await callClaudeJSON(system, chatHistory);
+    addBotBubble(result.reply || "");
+    chatHistory.push({role:"assistant", content: result.reply || ""});
+    if(result.summary){
+      Object.keys(storySummary).forEach(k=>{ if(result.summary[k]) storySummary[k] = result.summary[k]; });
+    }
+    if(result.done){
+      chatDone = true;
+      document.getElementById('pathChoiceBox').classList.remove('hidden');
+    }
+  }catch(e){
+    errBox.style.display='block';
+  }finally{
+    loadBox.style.display='none';
+    document.getElementById('chatSendBtn').disabled = false;
+    document.getElementById('chatInput').disabled = chatDone;
+  }
+}
+
+function choosePath(p){
+  mode = p;
+  document.getElementById('slowBtn').classList.toggle('chosen', p==='slow');
+  document.getElementById('fastBtn').classList.toggle('chosen', p==='fast');
+  document.getElementById('slowSection').classList.toggle('hidden', p!=='slow');
+  document.getElementById('fastSection').classList.toggle('hidden', p!=='fast');
+  if(p==='slow') generateSlowFrames();
+  if(p==='fast') ensureVocabHints();
+  document.getElementById(p==='slow'?'slowSection':'fastSection').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+async function generateSlowFrames(){
+  if(slowFramesCache){ return; }
+  const loadBox = document.getElementById('framesLoading');
+  loadBox.style.display='block';
+  const system = `너는 한국 초등학교 5학년 학생의 대화 요약을 보고, 학생이 과거형 동사를 채워 넣으며 완성할 수 있는 영어 예시 문장 4~5개를 만드는 선생님이야.
+규칙:
+1. 대화 요약(when/place/person/activity/seen/feeling)에 있는 내용만 사용해서 문장을 만들어. 요약에 없는 내용은 지어내지 마. 정보가 부족하면 문장 개수를 줄여도 돼.
+2. 각 문장에서, 학생이 직접 과거형 동사를 채워 넣을 수 있도록 동사 자리를 정확히 '___' 로 비워둬. 동사를 제외한 나머지 단어(장소, 사람, 사물 등)는 요약 내용을 바탕으로 이미 채워서 자연스러운 문장으로 만들어. 한 문장에 '___'는 1개만 사용해.
+3. 전체 문장 중 최소 2개 이상은 서로 다른 불규칙 과거형 동사(go, eat, see, feel, have, take, buy, meet, make, do, get, give, come, run, write, ride, swim, watch, draw 중)의 자리를 비워둬.
+4. 문장은 아주 쉬운 5학년 수준으로, 짧고 자연스럽게 써.
+5. 각 문장에 대한 한국어 설명을 함께 적어. 문장의 뜻과, 어떤 동사의 과거형을 넣어야 하는지 힌트(기본형)를 알려줘. 예: "나는 어제 해변에 갔다. (go의 과거형을 넣어보세요)"
+6. 반드시 아래 JSON 형식으로만 답해. 다른 말은 절대 하지 마:
+{"frames":[{"text":"영어 문장, 동사 자리는 ___ 로","kr":"한국어 설명 및 힌트"}]}`;
+  try{
+    const result = await callClaudeJSON(system, [{role:"user", content: JSON.stringify(storySummary)}], 1200);
+    slowFramesCache = result.frames || [];
+    renderSlowFrames(slowFramesCache);
+  }catch(e){
+    document.getElementById('dynamicFrames').innerHTML = '<p class="hint">문장을 만들지 못했어요. 아래 단어장을 참고해서 extraText 칸에 자유롭게 써보세요.</p>';
+  }finally{
+    loadBox.style.display='none';
+  }
+}
+
+function renderSlowFrames(frames){
+  const container = document.getElementById('dynamicFrames');
+  container.innerHTML = '';
+  slowFrameInputs = [];
+  if(!frames || frames.length===0){
+    container.innerHTML = '<p class="hint">문장을 만들지 못했어요. 아래 단어장을 참고해서 자유롭게 써보세요.</p>';
+    return;
+  }
+  frames.forEach((f, idx)=>{
+    const text = f.text || '';
+    const parts = text.split('___');
+    const lineDiv = document.createElement('div'); lineDiv.className='frame-line';
+    const numSpan = document.createElement('span'); numSpan.className='num'; numSpan.textContent = idx+1;
+    lineDiv.appendChild(numSpan);
+    lineDiv.appendChild(document.createTextNode(' ' + parts[0]));
+    const frameInputs = [];
+    for(let i=1;i<parts.length;i++){
+      const inp = document.createElement('input');
+      inp.className='blank'; inp.placeholder='past tense';
+      inp.addEventListener('focus', ()=>{ lastFocused = inp; });
+      lineDiv.appendChild(inp);
+      frameInputs.push(inp);
+      lineDiv.appendChild(document.createTextNode(parts[i]));
+    }
+    container.appendChild(lineDiv);
+    if(f.kr){
+      const note = document.createElement('span'); note.className='kr-note'; note.textContent = f.kr;
+      container.appendChild(note);
+    }
+    slowFrameInputs.push({parts:parts, inputs:frameInputs});
+  });
+}
+
+async function ensureVocabHints(){
+  if(vocabHintCache) return;
+  const box = document.getElementById('fastHintBox');
+  const loadBox = document.getElementById('fastHintLoading');
+  loadBox.style.display='block';
+  const system = `너는 한국 초등학교 5학년 학생의 한국어 이야기 요약을 보고, 영어 글쓰기에 쓸 수 있는 아주 쉬운 영어 단어/표현 힌트를 만들어주는 선생님이야.
+아래 JSON 형식으로만 답해. 다른 말은 하지 마. 정보가 없는 항목은 빈 배열로 둬:
+{"place":["...", "..."],"person":["..."],"activity":["..."],"seen":["..."],"feeling":["..."]}
+각 배열에는 1~3개의 아주 쉬운 영어 단어나 짧은 표현만 넣어. place와 activity와 seen은 명사(구), feeling은 형용사로.`;
+  try{
+    const result = await callClaudeJSON(system, [{role:"user", content: JSON.stringify(storySummary)}]);
+    vocabHintCache = result;
+    box.innerHTML = '';
+    const labels = {place:"🌟 장소 힌트", person:"🌟 사람 힌트", activity:"🌟 활동 힌트", seen:"🌟 본 것 힌트", feeling:"🌟 기분 힌트"};
+    Object.keys(labels).forEach(k=>{
+      const arr = result[k];
+      if(arr && arr.length){
+        const g = document.createElement('div'); g.className='hint-group';
+        const lbl = document.createElement('div'); lbl.className='hint-label'; lbl.textContent = labels[k];
+        const row = document.createElement('div'); row.className='hint-chips';
+        arr.forEach(w=>{
+          const chip = document.createElement('button');
+          chip.type='button'; chip.className='chip hint'; chip.textContent = w;
+          chip.onclick = ()=> insertWord(w);
+          row.appendChild(chip);
+        });
+        g.appendChild(lbl); g.appendChild(row); box.appendChild(g);
+      }
+    });
+  }catch(e){
+    box.innerHTML = '<p class="hint">힌트를 불러오지 못했어요. 그냥 자유롭게 써보세요.</p>';
+  }finally{
+    loadBox.style.display='none';
+  }
+}
+
+function compileDraftFromBlanks(){
+  const sentences = [];
+  (slowFrameInputs||[]).forEach(f=>{
+    if(f.inputs.length>0 && f.inputs.every(inp=>inp.value.trim())){
+      let s = f.parts[0];
+      f.inputs.forEach((inp,i)=>{ s += inp.value.trim() + f.parts[i+1]; });
+      sentences.push(s.trim());
+    }
+  });
+  const extra = document.getElementById('extraText').value.trim();
+  if(extra) sentences.push(extra);
+  return sentences.join(' ');
+}
+function getDraftText(){
+  if(mode==='fast') return document.getElementById('freeDraft').value.trim();
+  return compileDraftFromBlanks();
+}
+function rewriteAgain(){
+  if(mode==='slow'){
+    const firstInput = document.querySelector('#dynamicFrames .blank');
+    if(firstInput) firstInput.focus();
+  } else {
+    document.getElementById('freeDraft').focus();
+  }
+}
+
+async function submitForFeedback(){
+  const draft = getDraftText();
+  const errBox = document.getElementById('feedbackError');
+  const loadBox = document.getElementById('feedbackLoading');
+  errBox.style.display='none';
+  if(!draft){
+    errBox.textContent = '아직 쓴 문장이 없어요! 위에서 문장을 만들어보세요.';
+    errBox.style.display='block';
+    return;
+  }
+  lastDraft = draft;
+  const btns = [document.getElementById('submitBtnSlow'), document.getElementById('submitBtnFast')];
+  btns.forEach(b=>{ if(b) b.disabled = true; });
+  loadBox.style.display='block';
+
+  const system = `너는 한국 초등학교 5학년 학생에게 영어 글쓰기 피드백을 주는 친절하고 다정한 원어민 선생님이야.
+학생이 과거형 표현을 이용해 자신의 경험을 영어로 짧게 썼어. 아래 규칙을 반드시 지켜.
+1. 항상 학생을 칭찬하는 말로 시작해.
+2. 문법, 어순, 철자, 시제 오류를 확인하고 자연스러운 영어 문장으로 고쳐줘. 학생 수준(5학년 초급)에 맞게, 학생이 쓴 단어와 아이디어는 최대한 살려서 고쳐.
+3. 고친 이유는 한국어로 아주 쉽고 짧게 설명해.
+4. 학생이 쓴 영어가 짧거나 이상해도 절대 혼내지 말고 격려해.
+5. 반드시 아래 JSON 형식으로만 답해. 다른 말은 절대 하지 마:
+{"greeting":"칭찬 한 문장(한국어)","corrected":"자연스럽게 고친 영어 전체 글","tips":["쉬운 한국어로 된 팁1","팁2","팁3(선택)"],"badge":"최고예요! 또는 아주 잘했어요 또는 좋아요, 조금만 더! 또는 다시 도전해봐요 중 하나"}`;
+  try{
+    const result = await callClaudeJSON(system, [{role:"user", content: draft}]);
+    attemptCount += 1;
+    lastCorrected = result.corrected || draft;
+    document.getElementById('attemptTag').textContent = attemptCount + '번째 도전';
+    document.getElementById('badgeText').textContent = result.badge || '잘했어요';
+    document.getElementById('greetingText').textContent = result.greeting || '';
+    document.getElementById('correctedText').textContent = lastCorrected;
+    const tipsList = document.getElementById('tipsList');
+    tipsList.innerHTML = '';
+    (result.tips||[]).forEach(t=>{ const li=document.createElement('li'); li.textContent=t; tipsList.appendChild(li); });
+    document.getElementById('letterBox').style.display='block';
+    document.getElementById('practiceBox').style.display = (mode==='slow') ? 'block' : 'none';
+    document.getElementById('practiceInput').value = '';
+    document.getElementById('practiceResult').style.display='none';
+    document.getElementById('letterBox').scrollIntoView({behavior:'smooth', block:'start'});
+  }catch(e){
+    errBox.textContent = '앗, 지금은 편지를 받을 수 없어요. 잠시 후 다시 눌러주세요!';
+    errBox.style.display='block';
+  }finally{
+    btns.forEach(b=>{ if(b) b.disabled=false; });
+    loadBox.style.display='none';
+  }
+}
+
+function normalize(s){ return s.toLowerCase().replace(/[.,!?]/g,'').replace(/\s+/g,' ').trim(); }
+function checkPractice(){
+  const typed = normalize(document.getElementById('practiceInput').value);
+  const target = normalize(lastCorrected);
+  const box = document.getElementById('practiceResult');
+  if(!typed){ box.className='practice-result retry'; box.textContent='아직 아무것도 안 썼어요. 위 문장을 보면서 써볼까요?'; box.style.display='block'; return; }
+  if(target.indexOf(typed)!==-1 || typed.length>10){
+    box.className='practice-result ok'; box.textContent='참 잘했어요! 손으로 직접 써보니 더 기억에 남죠? 🎉';
+  }else{
+    box.className='practice-result retry'; box.textContent='좋은 시도예요! 위 문장을 한 번 더 보면서 천천히 다시 써볼까요? 💪';
+  }
+  box.style.display='block';
+}
+
+function startActivity(){
+  const cls = document.getElementById('classField').value.trim();
+  const num = document.getElementById('numberField').value.trim();
+  const name = document.getElementById('studentName').value.trim();
+  if(!cls || !num || !name){ alert('반, 번호, 이름을 모두 입력해주세요!'); return; }
+  document.getElementById('classField').disabled = true;
+  document.getElementById('numberField').disabled = true;
+  document.getElementById('studentName').disabled = true;
+  document.getElementById('startGateBtn').disabled = true;
+  document.getElementById('mainContent').classList.remove('hidden');
+  document.getElementById('mainContent').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function compressImage(blob, maxWidth){
+  return new Promise((resolve, reject)=>{
+    const url = URL.createObjectURL(blob);
+    const img = new Image();
+    img.onload = ()=>{
+      let w = img.width, h = img.height;
+      if(w > maxWidth){ h = Math.round(h * (maxWidth / w)); w = maxWidth; }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      canvas.toBlob(b=>{ URL.revokeObjectURL(url); resolve(b); }, 'image/jpeg', 0.78);
+    };
+    img.onerror = (e)=>{ URL.revokeObjectURL(url); reject(e); };
+    img.src = url;
+  });
+}
+
+async function setPhoto(blob){
+  try{
+    const compressed = await compressImage(blob, 800);
+    photoBlob = compressed;
+    selectedPhotoUrl = null;
+    const url = URL.createObjectURL(compressed);
+    document.getElementById('illustBox').innerHTML = '<img src="'+url+'">';
+    document.getElementById('photoResults').classList.add('hidden');
+  }catch(e){
+    document.getElementById('illustBox').textContent = '이미지를 불러오지 못했어요. 다시 시도해주세요.';
+  }
+}
+
+async function searchPhoto(){
+  const draftForPrompt = lastCorrected || lastDraft || (mode==='fast' ? document.getElementById('freeDraft').value.trim() : compileDraftFromBlanks());
+  if(!draftForPrompt){
+    alert('먼저 이야기를 쓰고 선생님께 검사를 받아주세요!');
+    return;
+  }
+  const loadBox = document.getElementById('photoSearchLoading');
+  loadBox.style.display = 'block';
+  try{
+    const keywordSystem = `학생의 영어 글을 읽고, 그 장면을 가장 잘 나타내는 아주 간단한 영어 검색어 하나(단어 1~2개)만 출력해.
+다른 설명, 따옴표, 마침표는 절대 넣지 마. 예: "beach", "amusement park", "pizza"`;
+    const keyword = await callClaudeRaw(keywordSystem, [{role:"user", content: draftForPrompt}], 30);
+
+    const res = await fetch('/api/search-photo', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'search', query: keyword })
+    });
+    const data = await res.json();
+    if(data.error) throw new Error(data.error);
+    renderPhotoResults(data.results || []);
+  }catch(e){
+    alert('사진을 찾지 못했어요: ' + (e.message||e));
+  }finally{
+    loadBox.style.display = 'none';
+  }
+}
+
+function renderPhotoResults(results){
+  const box = document.getElementById('photoResults');
+  box.innerHTML = '';
+  if(results.length === 0){
+    box.innerHTML = '<p class="hint">검색 결과가 없어요. 다른 이야기로 다시 시도해보세요.</p>';
+  }else{
+    results.forEach(r=>{
+      const img = document.createElement('img');
+      img.src = r.thumb;
+      img.alt = r.alt || '';
+      img.onclick = ()=> choosePhoto(r);
+      box.appendChild(img);
+    });
+  }
+  box.classList.remove('hidden');
+}
+
+function choosePhoto(r){
+  photoBlob = null;
+  selectedPhotoUrl = r.regular;
+  const attribution = r.photographerName
+    ? '<p class="attribution">Photo by <a href="'+r.photographerUrl+'?utm_source=my-story-postcard&utm_medium=referral" target="_blank">'+r.photographerName+'</a> on <a href="https://unsplash.com/?utm_source=my-story-postcard&utm_medium=referral" target="_blank">Unsplash</a></p>'
+    : '';
+  document.getElementById('illustBox').innerHTML = '<img src="'+r.regular+'">' + attribution;
+  document.getElementById('photoResults').classList.add('hidden');
+  if(r.downloadLocation){
+    fetch('/api/search-photo', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'track', downloadLocation: r.downloadLocation })
+    }).catch(()=>{});
+  }
+}
+
+function toNum(s){ const n = parseInt(s,10); return isNaN(n)?0:n; }
+
+async function saveFinal(btnEl){
+  const name = document.getElementById('studentName').value.trim();
+  const confirmBox = document.getElementById('saveConfirm');
+  if(!name){ alert('이름을 먼저 적어주세요!'); return; }
+  if(!photoBlob && !selectedPhotoUrl){
+    const ok = confirm('아직 사진을 넣지 않았어요. 사진 없이 제출할까요?');
+    if(!ok) return;
+  }
+  const classField = document.getElementById('classField').value.trim() || '0';
+  const numberField = document.getElementById('numberField').value.trim() || '0';
+  const saveBtn = btnEl || null;
+  if(saveBtn) saveBtn.disabled = true;
+  confirmBox.style.display='none';
+
+  let photoUrl = '';
+  try{
+    if(photoBlob){
+      const path = 'C' + toNum(classField) + '-N' + toNum(numberField) + '-' + Date.now() + '.jpg';
+      const { error: upErr } = await supabaseClient.storage.from('photos').upload(path, photoBlob, { contentType:'image/jpeg' });
+      if(upErr) throw upErr;
+      const { data: pubData } = supabaseClient.storage.from('photos').getPublicUrl(path);
+      photoUrl = pubData.publicUrl;
+    }else if(selectedPhotoUrl){
+      photoUrl = selectedPhotoUrl; // Unsplash 사진은 저장소에 올리지 않고 원본 주소를 그대로 사용해요
+    }
+    const record = {
+      class_number: toNum(classField),
+      student_number: toNum(numberField),
+      name: name,
+      when_field: storySummary.when || '',
+      mode: mode, draft: lastDraft, corrected: lastCorrected,
+      handwritten: (mode==='slow') ? document.getElementById('practiceInput').value.trim() : '',
+      photo_url: photoUrl
+    };
+    const { error } = await supabaseClient.from('submissions').insert([record]);
+    if(error) throw error;
+    confirmBox.textContent = '제출 완료! 잘했어요, ' + name + '! 📮';
+    confirmBox.style.display='block';
+  }catch(e){
+    confirmBox.textContent = '저장에 실패했어요. 선생님께 말씀드려주세요. (' + (e.message||e) + ')';
+    confirmBox.style.display='block';
+  }finally{
+    if(saveBtn) saveBtn.disabled = false;
+  }
+}
+
+function checkTeacherPin(){
+  const input = prompt('선생님 확인 번호를 입력하세요');
+  return input === TEACHER_PIN;
+}
+
+async function loadTeacherView(){
+  if(!checkTeacherPin()){ alert('확인 번호가 올바르지 않아요.'); return; }
+  const listBox = document.getElementById('teacherList');
+  listBox.innerHTML = '불러오는 중...';
+  try{
+    const { data, error } = await supabaseClient
+      .from('submissions')
+      .select('*')
+      .order('class_number', { ascending: true })
+      .order('student_number', { ascending: true })
+      .order('created_at', { ascending: true });
+    if(error) throw error;
+    const entries = data || [];
+    if(entries.length===0){ listBox.innerHTML = '<p class="hint">아직 제출된 이야기가 없어요.</p>'; return; }
+    lastLoadedEntries = entries;
+    listBox.innerHTML = '';
+    entries.forEach(rec=>{
+      const card = document.createElement('div'); card.className='entry-card';
+      const thumb = rec.photo_url ? '<img src="'+rec.photo_url+'" style="width:60px;height:60px;object-fit:cover;border-radius:6px;float:right;margin-left:8px;">' : '';
+      card.innerHTML = thumb + '<span class="etag">'+(rec.class_number||'-')+'반 '+(rec.student_number||'-')+'번</span>' +
+        '<span class="ename">'+rec.name+'</span><span class="etime">'+new Date(rec.created_at).toLocaleString()+'</span>' +
+        '<div style="margin-top:6px;"><b>수정 전:</b> '+ (rec.draft || '(없음)') + '</div>' +
+        '<div style="margin-top:4px;"><b>완성본:</b> '+ (rec.corrected || '(없음)') + '</div>';
+      listBox.appendChild(card);
+    });
+    document.getElementById('csvBtn').classList.remove('hidden');
+  }catch(e){
+    listBox.innerHTML = '<p class="hint">불러오지 못했어요. (' + (e.message||e) + ')</p>';
+  }
+}
+
+function csvEscape(v){
+  const s = (v==null?'':String(v)).replace(/"/g,'""');
+  return '"' + s + '"';
+}
+function downloadCSV(){
+  if(!lastLoadedEntries.length){ alert('먼저 불러오기를 눌러주세요.'); return; }
+  const header = ['반','번호','이름','제출시각','When','수정 전 원문','완성본(첨삭 후)','손글씨연습','사진 URL'];
+  const rows = lastLoadedEntries.map(r=> [r.class_number, r.student_number, r.name, new Date(r.created_at).toLocaleString(), r.when_field, r.draft, r.corrected, r.handwritten, r.photo_url].map(csvEscape).join(','));
+  const csv = '\uFEFF' + header.map(csvEscape).join(',') + '\n' + rows.join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'submissions.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function copyFinal(){
+  const text = document.getElementById('correctedText').textContent;
+  navigator.clipboard.writeText(text).then(()=>{ alert('복사했어요! 이제 붙여넣기 할 수 있어요.'); });
+}
+
+init();
+</script>
+</body>
+</html>
