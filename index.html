@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>나의 특별한 하루 - 영어 엽서 쓰기</title>
+<title>나의 특별한 하루</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Gowun+Dodum&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -186,11 +186,11 @@
     <div class="tape tl"></div><div class="tape tr"></div>
     <div class="stamp-icon">✉️</div>
     <h1>나의 특별한 하루</h1>
-    <p class="subtitle">과거형 영어로 써보기</p>
+    <p class="subtitle">과거 경험 영어로 써보기</p>
     <div class="intro-row">
-      <div class="intro-field"><label>반 (Class)</label><input type="text" id="classField" placeholder="예: 3" inputmode="numeric"></div>
-      <div class="intro-field"><label>번호 (No.)</label><input type="text" id="numberField" placeholder="예: 12" inputmode="numeric"></div>
-      <div class="intro-field wide"><label>내 이름 (Name)</label><input type="text" id="studentName" placeholder="예: 김하늘"></div>
+      <div class="intro-field"><label>반 (Class)</label><input type="text" id="classField" placeholder="예: 1" inputmode="numeric"></div>
+      <div class="intro-field"><label>번호 (No.)</label><input type="text" id="numberField" placeholder="예: 1" inputmode="numeric"></div>
+      <div class="intro-field wide"><label>내 이름 (Name)</label><input type="text" id="studentName" placeholder="예: Olivia"></div>
     </div>
     <div class="submit-wrap" style="margin-top:16px;">
       <button class="stamp-btn" id="startGateBtn" onclick="startActivity()">✍️ 시작하기</button>
@@ -475,8 +475,7 @@ function insertWord(word){
 
 async function callClaudeRaw(system, messages, maxTokens){
   // 넷리파이 함수(/api/chat)가 서버에서 무료 Gemini API 키로 대신 요청해줘요.
-  const response = await fetch("/api/chat", {
-    method:"POST", headers:{"Content-Type":"application/json"},
+const response = await fetch("/.netlify/functions/chat", {    method:"POST", headers:{"Content-Type":"application/json"},
     body: JSON.stringify({ max_tokens: maxTokens||1000, system:system, messages:messages })
   });
   const data = await response.json();
@@ -834,7 +833,7 @@ async function searchPhoto(){
 다른 설명, 따옴표, 마침표는 절대 넣지 마. 예: "beach", "amusement park", "pizza"`;
     const keyword = await callClaudeRaw(keywordSystem, [{role:"user", content: draftForPrompt}], 30);
 
-    const res = await fetch('/api/search-photo', {
+    const res = await fetch('/.netlify/functions/search-photo', {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({ action:'search', query: keyword })
@@ -875,8 +874,7 @@ function choosePhoto(r){
   document.getElementById('illustBox').innerHTML = '<img src="'+r.regular+'">' + attribution;
   document.getElementById('photoResults').classList.add('hidden');
   if(r.downloadLocation){
-    fetch('/api/search-photo', {
-      method:'POST', headers:{'Content-Type':'application/json'},
+fetch('/.netlify/functions/search-photo', {      method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ action:'track', downloadLocation: r.downloadLocation })
     }).catch(()=>{});
   }
